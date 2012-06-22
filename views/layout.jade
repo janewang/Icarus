@@ -5,8 +5,8 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(name='description', content='Icarus')
     meta(name='author', content='Jane Wang')
-    != stylesheets('bootstrap')
-    != stylesheets('docs')
+    != css('bootstrap')
+    != css('docs')
 
   body
     .navbar.navbar-fixed-top
@@ -29,5 +29,7 @@ html
           #main(role='main')
             block content
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js')
+    script(src='/socket.io/socket.io.js')
     != js('site')
+    
     script(src='/bootstrap')

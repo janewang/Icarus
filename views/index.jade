@@ -1,57 +1,24 @@
-//- extends layout
-//- 
-//- block content
-//-   .container
-//-     h1 Icarus
+extends layout
 
-.navbar.navbar-fixed-top
-  .navbar-inner
-    .container
-      a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-        span.icon-bar
-        span.icon-bar
-        span.icon-bar
-      a.brand(href='#') Project name
-      .nav-collapse
-        ul.nav
-          li.active
-            a(href='#') Home
-          li
-            a(href='#about') About
-          li
-            a(href='#contact') Contact
-      //
-        /.nav-collapse 
-.container
-  //
-     Main hero unit for a primary marketing message or call to action 
-  .hero-unit
-    h1 Hello, world!
-    p
-      | This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.
-    p
-      a.btn.btn-primary.btn-large Learn more »
-  //
-     Example row of columns 
-  .row
-    .span4
-      h2 Heading
-      p
-        | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn(href='#') View details »
-    .span4
-      h2 Heading
-      p
-        | Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn(href='#') View details »
-    .span4
-      h2 Heading
-      p
-        | Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-      p
-        a.btn(href='#') View details »
-  hr
-  footer
-    p © Company 2012
+block content
+  .navbar.navbar-fixed-top
+    .navbar-inner
+      .container
+        a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        a.brand(href='/') Icarus
+        .nav-collapse
+          ul.nav
+            li.active
+              a(href='/') Home
+            li
+              a(href='/about') About
+            li
+              a(href='/contact') Contact
+  .container
+    canvas#gamescreen(height='600px', width='800px', style='background-color: black; margin-top: 50px')
+    hr
+    footer
+      p © Icarus 2012
