@@ -18,7 +18,8 @@ block content
             li
               a(href='/contact') Contact
   .container
-    canvas#gamescreen(height='600px', width='800px', style='background-color: black; margin-top: 50px')
+    a.btn.btn-danger.btn-large(type='submit', name='start', onclick="main(); return false") Start
+    canvas#particles(height='600px', width='800px', style='background-color: white; margin-top: 50px')
     hr
     footer
       p © Icarus 2012
