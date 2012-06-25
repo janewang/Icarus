@@ -1,23 +1,38 @@
-function draw(x, y) {
-  var ctx = $('#particles')[0].getContext('2d');
+var Icarus = function(canvas) {
+  var context = canvas.getContext('2d'); 
   var img = new Image();
   img.src = '/images/kid_icarus.png';
-  img.onload = function(){
-    ctx.drawImage(img,x,y);
-  }
+
+  this.draw = function(x, y) {
+    img.onload = function(){
+      context.drawImage(img,x,y);
+    }
+  } 
 }
-    
+
 function fly() {
-   $('#particles').bind('mousemove', function(e){
+  var canvas = $('#particles')[0];
+
+  // border limit
+  $(window).bind('mousemove', function(e){
     var x, y;
-    if (e.pageX || e.pageY) {
-      x = e.pageX - this.offsetLeft;
-      y = e.pageY - this.offsetTop;
+    if(e.pageX < canvas.offsetLeft + 25) {
+      x = 0;
+    } else if(e.pageX - canvas.offsetLeft > canvas.width - 25) {
+      x = canvas.width - 25;
+    } else{
+      x = e.pageX - canvas.offsetLeft;
     }
-    else {
-      x = Math.random()*canvas.width;
-      y = Math.random()*canvas.height;
+
+    if(e.pageY < canvas.offsetTop + 33) {
+      y = 0;
+    } else if(e.pageY - canvas.offsetTop > canvas.height - 33) {
+      y = canvas.height - 33;
+    } else{
+      y = e.pageY - canvas.offsetTop;
     }
-    draw(x,y);
+
+    var a = new Icarus(canvas);
+    a.draw(x,y);
   });
 }

@@ -89,12 +89,6 @@ var Particle = function(canvas){
         context.beginPath();
         context.arc(this.position.x, this.position.y, 2.5, 0, Math.PI*2, false);
         context.fill();
-        
-        // new environment - strings
-        // context.moveTo(this.position.x + Math.random()*100, this.position.y + Math.random()*100);
-        // context.lineTo(this.position.x + Math.random()*100, this.position.y + Math.random()*100);
-        // context.fill();
-
     }
 }
 
