@@ -1,25 +1,9 @@
 extends layout
 
 block content
-  .navbar.navbar-fixed-top
-    .navbar-inner
-      .container
-        a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
-        a.brand(href='/') Icarus
-        .nav-collapse
-          ul.nav
-            li.active
-              a(href='/') Home
-            li
-              a(href='/about') About
-            li
-              a(href='/contact') Contact
   .container
-    a.btn.btn-danger.btn-large(type='submit', name='start', onclick="main(); return false") Start
-    canvas#particles(height='600px', width='800px', style='background-color: white; margin-top: 50px')
+    a.btn.btn-danger.btn-large(type='submit', name='start', onclick='main(); fly(); return false') Start
+    canvas#particles(height='600px', width='800px')
     hr
     footer
       p © Icarus 2012

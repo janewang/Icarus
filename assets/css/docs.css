@@ -12,7 +12,7 @@ body {
   position: relative;
   padding-top: 90px;
   background-color: #fff;
-  background-image: url(../images/grid-18px-masked.png);
+
   background-repeat: repeat-x;
   background-position: 0 40px;
 }
@@ -36,7 +36,11 @@ body {
   text-decoration: none;
 }
 
-
+/* canvas element styling
+-------------------------------------------------- */
+#particles {
+  background-color: #000;
+}
 /* Space out sub-sections more
 -------------------------------------------------- */
 section {

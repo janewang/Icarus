@@ -1,0 +1,73 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', 'paper' ]
+2 info using npm@1.1.25
+3 info using node@v0.6.19
+4 verbose node symlink /usr/local/bin/node
+5 verbose config file /Users/janewang/.npmrc
+6 verbose config file /usr/local/etc/npmrc
+7 verbose config file /usr/local/lib/node_modules/npm/npmrc
+8 verbose read json /Users/janewang/Sites/icarus/package.json
+9 verbose caching json /Users/janewang/Sites/icarus/package.json
+10 verbose loadDefaults icarus@0.0.1
+11 verbose read json /Users/janewang/Sites/icarus/node_modules/backbone/package.json
+12 verbose read json /Users/janewang/Sites/icarus/node_modules/bootstrap/package.json
+13 verbose read json /Users/janewang/Sites/icarus/node_modules/coffee-script/package.json
+14 verbose read json /Users/janewang/Sites/icarus/node_modules/connect-assets/package.json
+15 verbose read json /Users/janewang/Sites/icarus/node_modules/express/package.json
+16 verbose read json /Users/janewang/Sites/icarus/node_modules/handlebars/package.json
+17 verbose read json /Users/janewang/Sites/icarus/node_modules/jade/package.json
+18 verbose read json /Users/janewang/Sites/icarus/node_modules/less/package.json
+19 verbose read json /Users/janewang/Sites/icarus/node_modules/less-middleware/package.json
+20 verbose read json /Users/janewang/Sites/icarus/node_modules/mongoose/package.json
+21 verbose read json /Users/janewang/Sites/icarus/node_modules/nib/package.json
+22 verbose read json /Users/janewang/Sites/icarus/node_modules/request/package.json
+23 verbose read json /Users/janewang/Sites/icarus/node_modules/socket.io/package.json
+24 verbose read json /Users/janewang/Sites/icarus/node_modules/stylus/package.json
+25 verbose read json /Users/janewang/Sites/icarus/node_modules/underscore/package.json
+26 verbose caching json /Users/janewang/Sites/icarus/node_modules/bootstrap/package.json
+27 verbose caching json /Users/janewang/Sites/icarus/node_modules/backbone/package.json
+28 verbose caching json /Users/janewang/Sites/icarus/node_modules/coffee-script/package.json
+29 verbose caching json /Users/janewang/Sites/icarus/node_modules/connect-assets/package.json
+30 verbose caching json /Users/janewang/Sites/icarus/node_modules/express/package.json
+31 verbose caching json /Users/janewang/Sites/icarus/node_modules/handlebars/package.json
+32 verbose caching json /Users/janewang/Sites/icarus/node_modules/jade/package.json
+33 verbose caching json /Users/janewang/Sites/icarus/node_modules/less/package.json
+34 verbose caching json /Users/janewang/Sites/icarus/node_modules/less-middleware/package.json
+35 verbose caching json /Users/janewang/Sites/icarus/node_modules/mongoose/package.json
+36 verbose caching json /Users/janewang/Sites/icarus/node_modules/nib/package.json
+37 verbose caching json /Users/janewang/Sites/icarus/node_modules/request/package.json
+38 verbose caching json /Users/janewang/Sites/icarus/node_modules/socket.io/package.json
+39 verbose caching json /Users/janewang/Sites/icarus/node_modules/stylus/package.json
+40 verbose caching json /Users/janewang/Sites/icarus/node_modules/underscore/package.json
+41 verbose json from cache /Users/janewang/Sites/icarus/package.json
+42 verbose readDependencies using package.json deps
+43 verbose cache add [ 'paper', null ]
+44 silly cache add name=undefined spec="paper" args=["paper",null]
+45 verbose parsed url { pathname: 'paper', path: 'paper', href: 'paper' }
+46 verbose addNamed [ 'paper', '' ]
+47 verbose addNamed [ null, '' ]
+48 silly addNameRange { name: 'paper', range: '', hasData: false }
+49 verbose url raw paper
+50 verbose url resolving [ 'https://registry.npmjs.org/', './paper' ]
+51 verbose url resolved https://registry.npmjs.org/paper
+52 http GET https://registry.npmjs.org/paper
+53 http 404 https://registry.npmjs.org/paper
+54 silly registry.get cb [ 404,
+54 silly registry.get   { server: 'CouchDB/1.2.0 (Erlang OTP/R15B)',
+54 silly registry.get     date: 'Sat, 23 Jun 2012 19:29:39 GMT',
+54 silly registry.get     'content-type': 'application/json',
+54 silly registry.get     'content-length': '52',
+54 silly registry.get     'cache-control': 'must-revalidate' } ]
+55 error 404 'paper' is not in the npm registry.
+55 error 404 You should bug the author to publish it
+55 error 404
+55 error 404 Note that you can also install from a
+55 error 404 tarball, folder, or http url, or git url.
+56 error System Darwin 11.3.0
+57 error command "node" "/usr/local/bin/npm" "install" "paper"
+58 error cwd /Users/janewang/Sites/icarus
+59 error node -v v0.6.19
+60 error npm -v 1.1.25
+61 error code E404
+62 error message 404 Not Found: paper
+63 verbose exit [ 1, true ]
