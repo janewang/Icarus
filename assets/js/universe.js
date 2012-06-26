@@ -131,7 +131,7 @@ var System = function(amount, milliseconds){
         });
         setTimeout(refresh, milliseconds);
     };
-    setTimeout(refresh, milliseconds);
+    setTimeout(refresh, milliseconds); // safer code
 }
 
 var main = function(){

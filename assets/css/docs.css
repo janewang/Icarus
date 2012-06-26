@@ -40,6 +40,7 @@ body {
 -------------------------------------------------- */
 #particles {
   background-color: #000;
+  cursor: url('/images/kid_icarus.png'), moz-zoom-in;
 }
 
 /* Space out sub-sections more

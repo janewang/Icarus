@@ -2,7 +2,7 @@ extends layout
 
 block content
   .container
-    a.btn.btn-danger.btn-large(type='submit', name='start', onclick='main(); fly(); return false') Start
+    a.btn.btn-danger.btn-large(type='submit', name='start', onclick='main(); return false') Start
     canvas#particles(height='600px', width='800px')
     hr
     footer
