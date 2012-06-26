@@ -100,11 +100,9 @@ var System = function(amount, milliseconds){
     var context = canvas.getContext('2d');
         
     var particles = [];
-    for(var i=0; i<amount; i++){
-        particles.push(new Particle(canvas));
-    }
+    _(amount).times(function(){ particles.push(new Particle(canvas)); });
        
-    setInterval(function(){
+    var refresh = function(){
         // fading
         context.globalCompositeOperation = 'source-in';
         context.fillStyle = 'rgba(255,255,255,0.85)';
@@ -115,25 +113,25 @@ var System = function(amount, milliseconds){
         context.fillStyle = 'rgba(255,255,255,0.85)';
 
         // nbody code acceleration accumulation
-        for(var i=0, il=amount; i<il; i++){
-            var a = particles[i];
-            for(var j=i+1; j<amount; j++){
-                var b = particles[j];
-                var vec = a.position.sub(b.position);
-                var length = vec.length();
-                vec.idiv(Math.pow(length, 3)/factor); // scale the vector to the inverse square distance
+        _(particles).each(function(a, idx){
+          var rest = _.rest(particles, idx);
+          _(rest).each(function(b){
+            var vec = a.position.sub(b.position);
+            var length = vec.length();
+            vec.idiv(Math.pow(length, 3)/factor); // scale the vector to the inverse square distance
 
-                // safeguard for execessive integration error
-                if(length > min_proximity){
-                    b.acceleration.iadd(vec);
-                    a.acceleration.isub(vec);
-                }
+            // safeguard for execessive integration error
+            if(length > min_proximity){
+                b.acceleration.iadd(vec);
+                a.acceleration.isub(vec);
             }
-
-            a.step();
-            a.draw(context);
-        }
-    }, milliseconds);
+          });
+          a.step();
+          a.draw(context);
+        });
+        setTimeout(refresh, milliseconds);
+    };
+    setTimeout(refresh, milliseconds);
 }
 
 var main = function(){
