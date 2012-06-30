@@ -1,11 +1,18 @@
 var Icarus = function(canvas) {
   var img = new Image();
+  var self = this;
   img.src = '/images/kid_icarus.png';
   this.context = canvas.getContext('2d'); 
+  this.socket = io.connect('http://localhost');
+  
+  this.socket.on('player position', function (position) {
+    self.context.drawImage(img, position.x, position.y);
+  });
   
   this.draw = function() {
     if (this.position === undefined || this.position === null) return;
     var speed_limit = 4;
+    this.socket.emit('position', this.position);
     
     this.context.drawImage(img, this.position.x, this.position.y);
 
@@ -34,5 +41,17 @@ function fly() {
     a.position = {x: x, y: y};
   });
   
+  // keyboard input
+  $(window).on('onkeydown', function(e){
+    var e = window.event() || e;
+    var keyunicode = e.keyCode;
+    console.log(e);
+    switch (keyunicode) {
+      case 38: console.log(e.pageX); 
+      case 40: console.log(e.pageX);
+      case 37: // left
+      case 39: // right
+    }
+  });
 
 }

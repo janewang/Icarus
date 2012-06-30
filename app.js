@@ -56,20 +56,10 @@ server.listen(app.get('port'), function(){
 
 // Socket.IO server (single process only)
 
-var io = sio.listen(server),
-  nickname = {};
+var io = sio.listen(server);
   
-io.sockets.on('connection', function (sockets) {
-  socket.on('user message', function (msg) {
-    socket.broadcast.emit('user message', socket.nickname, msg);
+io.sockets.on('connection', function (socket) {
+  socket.on('position', function(position){
+    socket.broadcast.emit('player position', position);
   });
-  
-  socket.on('nickname', function (nick, fn) {
-    if (nicknames[nick]) {
-      fn(true);
-    } else {
-      fn(false);
-      nicknames[nick]
-    }
-  })
-})
+});
