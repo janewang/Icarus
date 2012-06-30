@@ -17,7 +17,7 @@ mongoose.connect('localhost', 'icarus');
 // Configuration
 
 app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
+  app.set('port', process.env.PORT || 4000);
   app.set('version', require('./package').version);
   app.set('name', require('./package').name);
   app.set('views', __dirname + '/views');

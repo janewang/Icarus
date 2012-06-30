@@ -90,6 +90,38 @@ var Particle = function(canvas){
         context.arc(this.position.x, this.position.y, 2.5, 0, Math.PI*2, false);
         context.fill();
     }
+    
+    this.end = function(context) {
+        var count = 0;
+        var endGame = function() {
+            count++;
+            if (count % 2 == 1)  {
+                context.clearRect(150, 240, 500, 200);
+                context.fillStyle = "rgba(0,255,0,0.85)";
+                context.font = '60pt Arial';
+                context.textAlign = 'center';
+                context.textBaseline = 'center';
+                context.fillText('GAME OVER', canvas.width/2, canvas.height/2);
+            } 
+            else { 
+                context.clearRect(150, 240, 500, 200);
+                context.fillStyle = 'rgba(0,255,0,0.85)';
+                context.font = '30pt Arial';
+                context.textAligh = 'center';
+                context.textBaseline = 'center';
+                context.fillText('To play again, press enter.', canvas.width/2, canvas.height/2);
+            }
+        }
+        
+        var timer = setInterval(endGame, 300);
+        
+        // replay
+        $(window).on('keydown', function(e){
+          if (e.keyCode === 13) {
+            clearInterval(timer);
+          }
+        });  
+    }
 }
 
 var System = function(amount, milliseconds){
@@ -101,11 +133,35 @@ var System = function(amount, milliseconds){
         
     var particles = [];
     _(amount).times(function(){ particles.push(new Particle(canvas)); });
-       
+    
+    
+    var ix, iy;
+    var listen = function() {
+      
+      $(window).bind('mousemove', function(e){
+        switch (true) {
+          case (e.pageX < canvas.offsetLeft + 25): ix = 0; break;
+          case (e.pageX - canvas.offsetLeft > canvas.width - 25): ix = canvas.width - 25; break;
+          default: ix = e.pageX - canvas.offsetLeft;
+        }
+
+        switch (true) {
+          case (e.pageY < canvas.offsetTop + 33): iy = 0; break;
+          case (e.pageY - canvas.offsetTop > canvas.height - 33): iy = canvas.height - 33; break;
+          default: iy = e.pageY - canvas.offsetTop;
+        }
+      });
+    }
+    
+    listen();
+    
     var refresh = function(){
         // fading
-        context.globalCompositeOperation = 'source-in';
-        context.fillStyle = 'rgba(255,255,255,0.85)';
+        context.globalCompositeOperation = 'source-in';        
+        context.fillStyle = "rgba("+
+          Math.floor(Math.random()*256)+","+
+          Math.floor(Math.random()*256)+","+
+          Math.floor(Math.random()*256)+",0.85)";   
         context.fillRect(0, 0, canvas.width, canvas.height);
 
         // dot drawing style
@@ -129,11 +185,41 @@ var System = function(amount, milliseconds){
           a.step();
           a.draw(context);
         });
-        setTimeout(refresh, milliseconds);
+        var icarus = $('#particles').data('icarus');
+        if (icarus !== undefined && icarus !== null) $('#particles').data('icarus').draw();
+      
+        _.chain(particles)
+            .filter(function(a) {
+                return ( Math.abs(a.position.x - ix) < 6 && (Math.abs(a.position.y - iy) < 6));
+            })
+            .each(function(a){
+                a.end(context);
+                $(window).off('mousemove');
+                clearInterval(timer);
+            });
+        
     };
-    setTimeout(refresh, milliseconds); // safer code
+    var timer = setInterval(refresh, milliseconds);
 }
 
+// start game with button click
 var main = function(){
     var system = new System(100, 20); // number of objects, speed
-};
+    fly();
+}
+
+// start game with enter key
+var enter = function(){
+  
+  $(window).on('keydown', function(e){
+    if(e.keyCode === 13) {
+      var canvas = $('#particles')[0];
+      var context = canvas.getContext('2d'); 
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      var system = new System(100, 20);
+      fly();
+    }
+  });  
+}
+
+enter();

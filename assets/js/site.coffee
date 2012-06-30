@@ -4,4 +4,5 @@
 #= require bootstrap
 #= require modernizr
 #= require paper
+#= require icarus
 #= require universe
