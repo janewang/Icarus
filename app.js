@@ -65,8 +65,8 @@ var io = sio.listen(server, {log: false});
 var icarusApp = new gameLogic.IcarusApp(io);
 
 io.sockets.on('connection', function (socket) {
-  socket.on('position', function(position){ 
-    socket.broadcast.emit('player position', position); // emit to all connected sockets, except the one it is called on
+  socket.on('icarus position', function(position){ 
+    socket.broadcast.emit('other icarus position', position); // emit to all connected sockets, except the one it is called on
   });
   
   socket.on('disconnect', function() {
