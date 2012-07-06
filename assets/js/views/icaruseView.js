@@ -6,65 +6,46 @@ var PlayerListView = Backbone.View.extend({
   },
   
   initialize: function(){
-    //_.bindAll(this, 'fly', 'draw');
-    this.collection = icarusCollection;
-  
-    var canvas = $('#particles')[0]; 
-    var context = canvas.getContext('2d');
-    var img = new Image();
-    img.src = '/images/kid_icarus.png';
+    _.bindAll(this, 'fly', 'draw');
     
+    this.icarusCollection = new IcarusCollection(1);
 
-    $(window).on('mousemove', function(e){
-      var x, y;
-      var canvas = $('#particles')[0]; 
-      switch (true) {
-        case (e.pageX < canvas.offsetLeft + 25): x = 0; break;
-        case (e.pageX - canvas.offsetLeft > canvas.width - 25): x = canvas.width - 25; break;
-        default: x = e.pageX - canvas.offsetLeft;
-      }
-
-      switch (true) {
-        case (e.pageY < canvas.offsetTop + 33): y = 0; break;
-        case (e.pageY - canvas.offsetTop > canvas.height - 33): y = canvas.height - 33; break;
-        default: y = e.pageY - canvas.offsetTop;
-      }
-      //a.position = {x: x, y: y};
-      console.log('x is ' + x + ' and y is ' + y);
-      context.drawImage(img, x, y);
+    this.socket = io.connect('http://'+window.location.hostname);
+    this.socket.on('player position', function (data) {
+      console.log(data);
     });
+  
+    this.canvas = $('#particles')[0]; 
+    this.context = this.canvas.getContext('2d');
+    this.img = new Image();
+    this.img.src = '/images/kid_icarus.png';
   },
   
   draw: function() {
-    this.canvas = $('#particles')[0]; 
-    this.context = canvas.getContext('2d');
-    
-    var img = new Image();
-    img.src = '/images/kid_icarus.png';
-    
     if (this.position === undefined || this.position === null) return;
-    this.socket.emit('position', this.position);   
-    this.context.drawImage(img, this.position.x, this.position.y);
+    this.socket.emit('icarus position', this.position);   
+    this.context.drawImage(this.img, this.position.x, this.position.y);
   },
   
   fly: function(e){
     var x, y;
+    
     switch (true) {
-      case (e.pageX < canvas.offsetLeft + 25): x = 0; break;
-      case (e.pageX - canvas.offsetLeft > canvas.width - 25): x = canvas.width - 25; break;
-      default: x = e.pageX - canvas.offsetLeft;
+      case (e.pageX < this.canvas.offsetLeft + 25): x = 0; break;
+      case (e.pageX - this.canvas.offsetLeft > this.canvas.width - 25): x = this.canvas.width - 25; break;
+      default: x = e.pageX - this.canvas.offsetLeft;
     }
 
     switch (true) {
-      case (e.pageY < canvas.offsetTop + 33): y = 0; break;
-      case (e.pageY - canvas.offsetTop > canvas.height - 33): y = canvas.height - 33; break;
-      default: y = e.pageY - canvas.offsetTop;
+      case (e.pageY < this.canvas.offsetTop + 33): y = 0; break;
+      case (e.pageY - this.canvas.offsetTop > this.canvas.height - 33): y = this.canvas.height - 33; break;
+      default: y = e.pageY - this.canvas.offsetTop;
     }
     
     // save mouse last move
     this.position = {x: x, y: y};
 
-    draw();
+    this.draw();
   }
 });
 
