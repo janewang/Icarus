@@ -60,7 +60,7 @@ server.listen(app.get('port'), function(){
 // socket.broadcast.emit: emit to all connected sockets except the one it is being called on (to client in all namespace,
 // except the current socket namespace, the current socket will not receive the event) 
 
-var io = sio.listen(server);
+var io = sio.listen(server, {log: false});
 
 var icarusApp = new gameLogic.IcarusApp(io);
 
