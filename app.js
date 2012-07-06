@@ -5,7 +5,7 @@
 
 var express     = require('express')
   , http        = require('http')
-  , sio          = require('socket.io');
+  , sio         = require('socket.io');
   
 global._        = require('underscore');
 global.request  = require('request');
@@ -44,6 +44,7 @@ app.configure('production', function(){
 });
 
 // include folders
+var gameLogic = require('./gameLogic');
 require('./routes');
 require('./helpers');
 
@@ -53,13 +54,22 @@ server.listen(app.get('port'), function(){
 });
 
 
-
-// Socket.IO server (single process only)
+// -- HOW TO USE DIFFERENT TYPES OF SOCKET EMITS ---
+// socket.emit: emit to a specific socket (only to current namespace)
+// io.sockets.emit: emit to all connected sockets (to clients in all namespace)
+// socket.broadcast.emit: emit to all connected sockets except the one it is being called on (to client in all namespace,
+// except the current socket namespace, the current socket will not receive the event) 
 
 var io = sio.listen(server);
-  
+
+var icarusApp = new gameLogic.IcarusApp(io);
+
 io.sockets.on('connection', function (socket) {
-  socket.on('position', function(position){
-    socket.broadcast.emit('player position', position);
+  socket.on('position', function(position){ 
+    socket.broadcast.emit('player position', position); // emit to all connected sockets, except the one it is called on
+  });
+  
+  socket.on('disconnect', function() {
+    io.sockets.emit('Player disconnected.');
   });
 });
