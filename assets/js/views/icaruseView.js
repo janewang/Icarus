@@ -8,12 +8,13 @@ var PlayerListView = Backbone.View.extend({
   
   initialize: function(){
     _.bindAll(this, 'start', 'draw', 'fly');
-    var _this = this;
+    var self = this;
     this.icarusCollection = new IcarusCollection(1);
 
     this.socket = io.connect('http://' + window.location.hostname);
     this.socket.on('other icarus position', function (data) {
-      _this.draw(data.x, data.y);
+      console.log(data);
+      self.draw(data.x, data.y);
     });
     
     this.canvas = $('#particles')[0]; 
@@ -31,26 +32,26 @@ var PlayerListView = Backbone.View.extend({
   },
   
   fly: function(){
-    var _this = this;
+    var self = this;
     $(window).bind('mousemove', function(e) {
       var x, y;
 
       switch (true) {
-        case (e.pageX < _this.canvas.offsetLeft + 25): x = 0; break;
-        case (e.pageX - _this.canvas.offsetLeft > _this.canvas.width - 25): x = _this.canvas.width - 25; break;
-        default: x = e.pageX - _this.canvas.offsetLeft;
+        case (e.pageX < self.canvas.offsetLeft + 25): x = 0; break;
+        case (e.pageX - self.canvas.offsetLeft > self.canvas.width - 25): x = self.canvas.width - 25; break;
+        default: x = e.pageX - self.canvas.offsetLeft;
       }
 
       switch (true) {
-        case (e.pageY < _this.canvas.offsetTop + 33): y = 0; break;
-        case (e.pageY - _this.canvas.offsetTop > _this.canvas.height - 33): y = _this.canvas.height - 33; break;
-        default: y = e.pageY - _this.canvas.offsetTop;
+        case (e.pageY < self.canvas.offsetTop + 33): y = 0; break;
+        case (e.pageY - self.canvas.offsetTop > self.canvas.height - 33): y = self.canvas.height - 33; break;
+        default: y = e.pageY - self.canvas.offsetTop;
       }
       
-      // save mouse last move
-      _this.position = {x: x, y: y};
-      _this.socket.emit('icarus position', this.position);
-      _this.draw(x, y);   
+      // save mouse's last position
+      self.position = {x: x, y: y};
+      self.socket.emit('icarus position', self.position);
+      self.draw(x, y);   
     });
   } 
 });

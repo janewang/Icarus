@@ -2,8 +2,19 @@ extends layout
 
 block content
   .container
-    a#start.btn.btn-danger.btn-large(type='submit', name='start') Start
-    canvas#particles(height='600px', width='800px')
-    hr
-    footer
-      p © Icarus 2012
+    .row
+      form
+        | Enter name:  
+        input(type='text', name='username') 
+        |   
+        a#start.btn.btn-danger.btn-large(type='submit', name='start') Start
+      canvas#particles(height='600px', width='800px')
+      p Current Level of Blood and Spirit
+      div#highscorer
+        ul
+          li display current level of blood and spirit
+          li add music to game
+          li assign final list of high scorers  
+      hr
+      footer
+        p © Icarus 2012

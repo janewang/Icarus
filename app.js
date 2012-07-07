@@ -53,7 +53,6 @@ server.listen(app.get('port'), function(){
   console.log("%s (%s) on port %d", app.get('name'), app.get('env'), app.get('port'));
 });
 
-
 // -- HOW TO USE DIFFERENT TYPES OF SOCKET EMITS ---
 // socket.emit: emit to a specific socket (only to current namespace)
 // io.sockets.emit: emit to all connected sockets (to clients in all namespace)
@@ -65,11 +64,17 @@ var io = sio.listen(server, {log: false});
 var icarusApp = new gameLogic.IcarusApp(io);
 
 io.sockets.on('connection', function (socket) {
-  socket.on('icarus position', function(position){ 
-    socket.broadcast.emit('other icarus position', position); // emit to all connected sockets, except the one it is called on
+  
+  socket.on('icarus position', function(position){
+    socket.broadcast.emit('other icarus position', position);
+  });
+  
+  socket.on('collision', function(data){
+    io.sockets.emit('One player has died.');
   });
   
   socket.on('disconnect', function() {
-    io.sockets.emit('Player disconnected.');
+    //io.sockets.emit('Player disconnected.');
+    console.log(socket.id + ' disconnected.');
   });
 });

@@ -1,13 +1,11 @@
 var sio = require('socket.io');
 
-// Icarus model
-var Icarus = function(x, y){
+
+// Icarus model - username and coordinates
+var Icarus = function(x, y, username){
   this.x = x;
   this.y = y;
-  
-  this.update = function() {
-    // allow this icarus to be updated by mouse movements
-  }
+  this.username = username;
   
   this.die = function() {
     // this icarus dies
@@ -125,9 +123,13 @@ var IcarusApp = function(io) {
   this.particles = [];
   _(100).times(_.bind(function() { this.particles.push(new Particle()); }, this));
   
+  this.playerList = [];
+  var clients = io.sockets.clients();
+  // console.log(clients);
+  
   var _this = this;
   
-  // update particle collection
+  // socket emit universe
   var timer = setInterval(function() {
     _this.update();
     io.sockets.emit('particle position', _.pluck(_this.particles, 'position'));
