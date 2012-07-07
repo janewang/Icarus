@@ -3,7 +3,7 @@ Icarus
 
 By Jane Wang [@janeylwang](https://twitter.com/JaneyLWang)
 
-A multiplayer game with many flying Icaruses. Survive for as long as you can against other players in a particle universe. Universe physics may change without warning. Try to beat your opponents by keep your spirit and blood count high. This game is partly inspired by Mozilla BrowserQuest and various large multiplayer games like WoW.
+A multiplayer game with many flying Icaruses. Survive as long as you can against other players in a particle universe. Universe physics may change without warning. Try to beat your opponents by keep your spirit and blood count high. This game is partly inspired by Mozilla BrowserQuest and various large multiplayer games like WoW.
 
 Setup Installation:
 
@@ -15,11 +15,10 @@ Setup Installation:
 
 4. Play!
 
-Major Dependencies in Icarus include:
+Major Dependencies Include:
 - Express
 - Backbone
 - Underscore
-- Socket.io
-and others.
+- Socket.io and others.
 
 ![icarus_screenshot png](https://github.com/janewang/icarus/raw/master/public/images/icarus_screenshot.png)
