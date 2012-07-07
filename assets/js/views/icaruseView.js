@@ -7,7 +7,7 @@ var PlayerListView = Backbone.View.extend({
   },
   
   initialize: function(){
-    _.bindAll(this, 'start', 'draw', 'fly');
+    _.bindAll(this, 'start', 'draw', 'fly', 'die');
     var self = this;
     this.icarusCollection = new IcarusCollection(1);
 
@@ -17,7 +17,8 @@ var PlayerListView = Backbone.View.extend({
     });
     
     this.socket.on('collision', function(data){
-      console.log('this player has died');  // check if the client sid is same as the client then emit kill screen
+      self.die();
+      console.log('this player has died');
     });
     
     this.canvas = $('#particles')[0]; 
@@ -28,6 +29,7 @@ var PlayerListView = Backbone.View.extend({
   
   start: function(x, y) {
     this.fly();
+    clearInterval(this.newGameTimer);
   },
   
   draw: function(x, y) {
@@ -59,7 +61,30 @@ var PlayerListView = Backbone.View.extend({
   },
   
   die: function() {
-    // paste die from junk.js
+    
+    // need this to show only on some clients, not all clients
+    var self = this;
+    var count = 0;
+    var endGame = function() {
+        count++;
+        if (count % 2 == 1)  {
+            self.context.clearRect(150, 240, 500, 200);
+            self.context.fillStyle = "rgba(0,255,0,0.85)";
+            self.context.font = '60pt Arial';
+            self.context.textAlign = 'center';
+            self.context.textBaseline = 'center';
+            self.context.fillText('GAME OVER', self.canvas.width/2, self.canvas.height/2);
+        } 
+        else {
+            self.context.clearRect(150, 240, 500, 200);
+            self.context.fillStyle = 'rgba(0,255,0,0.85)';
+            self.context.font = '30pt Arial';
+            self.context.textAligh = 'center';
+            self.context.textBaseline = 'center';
+            self.context.fillText('To play again, click Start.', self.canvas.width/2, self.canvas.height/2);
+        }
+    }
+    self.newGameTimer = setInterval(endGame, 300);
   } 
 });
 
