@@ -5,7 +5,7 @@ By Jane Wang [@janeylwang](https://twitter.com/JaneyLWang)
 
 A multiplayer game with many flying Icaruses. Survive as long as you can against other players in a particle universe. Universe physics may change without warning. Try to beat your opponents by keep your spirit and blood count high. This game is partly inspired by Mozilla BrowserQuest and various large multiplayer games like WoW.
 
-Setup Installation:
+### Setup Installation:
 
 1. Run `$ npm install` to resolve dependencies
 
@@ -15,7 +15,7 @@ Setup Installation:
 
 4. Play!
 
-Major Dependencies Include:
+### Major Dependencies Include:
 - Express
 - Backbone
 - Underscore

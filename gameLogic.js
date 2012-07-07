@@ -6,10 +6,8 @@ var Icarus = function(x, y, username){
   this.x = x;
   this.y = y;
   this.username = username;
+  this.sessionId = sessionId;
   
-  this.die = function() {
-    // this icarus dies
-  }
 }
 
 // vector model
@@ -113,8 +111,7 @@ function collision() {
           return ( Math.abs(a.position.x - ix) < 6 && (Math.abs(a.position.y - iy) < 6));
       })
       .each(function(a){
-          // for each collision stop the icarus
-          // kill the icarus Icarus.die();
+          io.sockets.emit('collision', data); // need to include sessionid to know which client is died
       });
 }
 

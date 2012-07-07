@@ -13,8 +13,11 @@ var PlayerListView = Backbone.View.extend({
 
     this.socket = io.connect('http://' + window.location.hostname);
     this.socket.on('other icarus position', function (data) {
-      console.log(data);
       self.draw(data.x, data.y);
+    });
+    
+    this.socket.on('collision', function(data){
+      console.log('this player has died');  // check if the client sid is same as the client then emit kill screen
     });
     
     this.canvas = $('#particles')[0]; 
@@ -53,6 +56,10 @@ var PlayerListView = Backbone.View.extend({
       self.socket.emit('icarus position', self.position);
       self.draw(x, y);   
     });
+  },
+  
+  die: function() {
+    // paste die from junk.js
   } 
 });
 
