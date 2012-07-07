@@ -8,7 +8,7 @@ var io = application.io;
 // except the current socket namespace, the current socket will not receive the event)
 
 io.sockets.on('connection', function (socket) {
-  console.log(socket.id);
+  //console.log(socket.id);
   
   socket.on('icarus position', function(position){
     socket.broadcast.emit('other icarus position', position);
@@ -20,7 +20,7 @@ io.sockets.on('connection', function (socket) {
   
   socket.on('disconnect', function() {
     //io.sockets.emit('Player disconnected.');
-    console.log('Player ' + socket.id + ' disconnected.');
+    console.log('Player ' + socket.id + ' has disconnected.');
   });
 });
 
@@ -142,10 +142,13 @@ var IcarusApp = function(io) {
   _(100).times(_.bind(function() { this.particles.push(new Particle()); }, this));
   
   this.playerList = [];
-  //console.log(io.sockets);
-  //console.log(io.sockets.manager);
-  //var clients = io.sockets.clients();
-  //_(clients.length).times(_.bind(function(){ this.playerList.push(new Icarus()); }, this));
+  var self = this;
+  
+  // make a player list
+  io.sockets.on('connection', function (socket) {
+    self.playerList.push(new Icarus(0, 0, 'anon', socket.id));
+    console.log(self.playerList);
+  });
   
   var _this = this;
   
@@ -153,7 +156,6 @@ var IcarusApp = function(io) {
     _this.update();
     io.sockets.emit('particle position', _.pluck(_this.particles, 'position'));
   }, 50);
-  
   //clearInterval(timer);
 }
 
@@ -177,7 +179,7 @@ IcarusApp.prototype.update = function() {
       }
     });
     a.step();
-  }); 
+  });
 }
 
 var icarusApp = new IcarusApp(io);
