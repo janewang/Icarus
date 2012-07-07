@@ -7,15 +7,15 @@ A multiplayer game with many flying Icaruses. Survive for as long as you can aga
 
 Setup Installation:
 
-1. Use npm to install dependencies in package.json
+1. Run `$ npm install` to resolve dependencies
 
-2. If you are the host, run `$ node app.js` and connect to http://localhost:4000/
+2. If you are the host, run `$ node app.js` and go to `http://localhost:4000/`
 
-3. Other players should connect to http://[host ip]:4000/
+3. Other players join the game at `http://[host ip]:4000/`
 
 4. Play!
 
-Major Dependencies:
+Major Dependencies in Icarus include:
 - Express
 - Backbone
 - Underscore
