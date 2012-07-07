@@ -7,11 +7,11 @@ Setup Installation:
 
 1. Use npm to install all dependencies (package.json)
 
-2. Host - if you are the host, please go to http://localhost:4000/ to play
+2. Host - if you are the host, please go to http://localhost:4000/
 
-3. Other players should connect to http://[host ip]:4000/ to play
+3. Other players should connect to http://[host ip]:4000/
 
-4. Play! May the best Icarus win!
+4. Play!
 
 Major Dependencies:
 - Express

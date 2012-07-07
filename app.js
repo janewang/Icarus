@@ -49,7 +49,7 @@ require('./routes');
 require('./helpers');
 
 var server = http.createServer(app);
-server.listen(app.get('port'), function(){
+server.listen(app.get('port'), function() {
   console.log("%s (%s) on port %d", app.get('name'), app.get('env'), app.get('port'));
 });
 
@@ -64,6 +64,10 @@ var io = sio.listen(server, {log: false});
 var icarusApp = new gameLogic.IcarusApp(io);
 
 io.sockets.on('connection', function (socket) {
+  var users = io.sockets.clients('room');
+  _.each(users, function(num) {
+    console.log(users[num]);
+  });
   
   socket.on('icarus position', function(position){
     socket.broadcast.emit('other icarus position', position);
