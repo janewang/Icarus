@@ -18,7 +18,8 @@ var PlayerListView = Backbone.View.extend({
     
     this.socket.on('collision', function(data){
       self.die();
-      console.log('this player has died');
+      console.log('Player with this session Id,' + _.pluck(io.sockets, 'sessionid') + ', has died.');
+      // send this die screen only to the client with died Icarus
     });
     
     this.canvas = $('#particles')[0]; 
@@ -37,6 +38,7 @@ var PlayerListView = Backbone.View.extend({
   },
   
   fly: function(){
+    
     var self = this;
     $(window).bind('mousemove', function(e) {
       var x, y;

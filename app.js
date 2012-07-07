@@ -29,7 +29,6 @@ app.configure(function(){
   app.use(express.cookieParser('keyboardcatz'));
   app.use(express.session());
   app.use(app.router);
-
   app.use(express.static(__dirname + '/public'));
 });
 
@@ -43,42 +42,15 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 
-// include folders
-var gameLogic = require('./gameLogic');
-require('./routes');
-require('./helpers');
-
 var server = http.createServer(app);
 server.listen(app.get('port'), function() {
   console.log("%s (%s) on port %d", app.get('name'), app.get('env'), app.get('port'));
 });
 
-// -- HOW TO USE DIFFERENT TYPES OF SOCKET EMITS ---
-// socket.emit: emit to a specific socket (only to current namespace)
-// io.sockets.emit: emit to all connected sockets (to clients in all namespace)
-// socket.broadcast.emit: emit to all connected sockets except the one it is being called on (to client in all namespace,
-// except the current socket namespace, the current socket will not receive the event) 
-
 var io = sio.listen(server, {log: false});
+exports.io = io;
 
-var icarusApp = new gameLogic.IcarusApp(io);
-
-io.sockets.on('connection', function (socket) {
-  var users = io.sockets.clients('room');
-  _.each(users, function(num) {
-    console.log(users[num]);
-  });
-  
-  socket.on('icarus position', function(position){
-    socket.broadcast.emit('other icarus position', position);
-  });
-  
-  socket.on('collision', function(data){
-    io.sockets.emit('One player has died.');
-  });
-  
-  socket.on('disconnect', function() {
-    //io.sockets.emit('Player disconnected.');
-    console.log(socket.id + ' disconnected.');
-  });
-});
+// include folders
+require('./routes');
+require('./helpers');
+require('./gameLogic');

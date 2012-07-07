@@ -1,13 +1,35 @@
-var sio = require('socket.io');
+var application = require('./app');
+var io = application.io;
 
+// -- HOW TO USE DIFFERENT TYPES OF SOCKET EMITS ---
+// socket.emit: emit to a specific socket (only to current namespace)
+// io.sockets.emit: emit to all connected sockets (to clients in all namespace)
+// socket.broadcast.emit: emit to all connected sockets except the one it is being called on (to client in all namespace,
+// except the current socket namespace, the current socket will not receive the event)
 
-// Icarus model - username and coordinates
-var Icarus = function(x, y, username){
+io.sockets.on('connection', function (socket) {
+  console.log(socket.id);
+  
+  socket.on('icarus position', function(position){
+    socket.broadcast.emit('other icarus position', position);
+  });
+  
+  socket.on('collision', function(data){
+    io.sockets.emit('One player has died.');
+  });
+  
+  socket.on('disconnect', function() {
+    //io.sockets.emit('Player disconnected.');
+    console.log('Player ' + socket.id + ' disconnected.');
+  });
+});
+
+// Icarus model
+var Icarus = function(x, y, username, sessionId){
   this.x = x;
   this.y = y;
   this.username = username;
   this.sessionId = sessionId;
-  
 }
 
 // vector model
@@ -53,9 +75,8 @@ var Vector = function(x, y){
 
 // particle model
 var Particle = function(){
-    // initializing variables
-    var width = 800, height = 600;
-    
+
+    var width = 800, height = 600;    
     var initial_speed = 1;
     var speed_limit = 4;
     var bounce_damping = 0.5;
@@ -121,12 +142,13 @@ var IcarusApp = function(io) {
   _(100).times(_.bind(function() { this.particles.push(new Particle()); }, this));
   
   this.playerList = [];
-  var clients = io.sockets.clients();
-  // console.log(clients);
+  //console.log(io.sockets);
+  //console.log(io.sockets.manager);
+  //var clients = io.sockets.clients();
+  //_(clients.length).times(_.bind(function(){ this.playerList.push(new Icarus()); }, this));
   
   var _this = this;
   
-  // socket emit universe
   var timer = setInterval(function() {
     _this.update();
     io.sockets.emit('particle position', _.pluck(_this.particles, 'position'));
@@ -141,7 +163,6 @@ IcarusApp.prototype.update = function() {
   var min_proximity = 4;
   var _this = this;
   
-  // nbody code acceleration accumulation
   _(this.particles).each(function(a, idx) {
     var rest = _.rest(_this.particles, idx);
     _(rest).each(function(b) {
@@ -159,4 +180,4 @@ IcarusApp.prototype.update = function() {
   }); 
 }
 
-exports.IcarusApp = IcarusApp;
+var icarusApp = new IcarusApp(io);
