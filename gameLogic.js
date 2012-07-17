@@ -7,11 +7,26 @@ var io = application.io;
 // socket.broadcast.emit: emit to all connected sockets except the one it is being called on (to client in all namespace,
 // except the current socket namespace, the current socket will not receive the event)
 
+var playerList = [];
+
 io.sockets.on('connection', function (socket) {
-  //console.log(socket.id);
   
-  socket.on('icarus position', function(position){
-    socket.broadcast.emit('other icarus position', position);
+  socket.on('icarus position', function(data){
+      socket.broadcast.emit('other icarus position', data);
+
+      _(playerList).each(function(icarus) {
+        if (icarus.sessionId == data.sessionId) {
+          console.log('update existing icarus');
+          icarus.x = data.x;
+          icarus.y = data.y;
+          icarus.blood = data.blood;
+          icarus.spirit = data.spirit;
+          icarus.alive = data.alive;
+        } else {
+          console.log('add new icarus');
+          playerList.push(new Icarus(data.x, data.y, data.username, data.sessionId, data.blood, data.spirit, data.alive));
+        }
+      });
   });
   
   socket.on('collision', function(data){
@@ -19,17 +34,19 @@ io.sockets.on('connection', function (socket) {
   });
   
   socket.on('disconnect', function() {
-    //io.sockets.emit('Player disconnected.');
     console.log('Player ' + socket.id + ' has disconnected.');
   });
 });
 
 // Icarus model
-var Icarus = function(x, y, username, sessionId){
+var Icarus = function(x, y, username, sessionId, blood, spirit, alive){
   this.x = x;
   this.y = y;
   this.username = username;
   this.sessionId = sessionId;
+  this.blood = blood;
+  this.spirit = spirit;
+  this.alive = alive
 }
 
 // vector model
@@ -125,8 +142,14 @@ var Particle = function(){
     }
 }
 
-// check for collision
-function collision() {
+// collision check
+function collision(particles, playerList) {
+  
+  // for each collision, deduct spirit and blood on Icarus model
+  // when blood is 0, set alive to false
+  this.particles = particles;
+  this.playerList = playerList;
+  
   _.chain(particles)
       .filter(function(a) {
           return ( Math.abs(a.position.x - ix) < 6 && (Math.abs(a.position.y - iy) < 6));
@@ -137,26 +160,16 @@ function collision() {
 }
 
 var IcarusApp = function(io) {
+  var self = this;
   
   this.particles = [];
   _(100).times(_.bind(function() { this.particles.push(new Particle()); }, this));
-  
-  this.playerList = [];
-  var self = this;
-  
-  // make a player list
-  io.sockets.on('connection', function (socket) {
-    self.playerList.push(new Icarus(0, 0, 'anon', socket.id));
-    console.log(self.playerList);
-  });
-  
-  var _this = this;
-  
+
+  var _this = this;  
   var timer = setInterval(function() {
     _this.update();
     io.sockets.emit('particle position', _.pluck(_this.particles, 'position'));
   }, 50);
-  //clearInterval(timer);
 }
 
 IcarusApp.prototype.update = function() {
@@ -164,7 +177,7 @@ IcarusApp.prototype.update = function() {
   var factor = 9;
   var min_proximity = 4;
   var _this = this;
-  
+
   _(this.particles).each(function(a, idx) {
     var rest = _.rest(_this.particles, idx);
     _(rest).each(function(b) {

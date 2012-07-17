@@ -10,8 +10,9 @@ var PlayerListView = Backbone.View.extend({
     _.bindAll(this, 'start', 'draw', 'fly', 'die');
     var self = this;
     this.icarusCollection = new IcarusCollection(1);
-
+    
     this.socket = io.connect('http://' + window.location.hostname);
+    
     this.socket.on('other icarus position', function (data) {
       self.draw(data.x, data.y);
     });
@@ -19,7 +20,7 @@ var PlayerListView = Backbone.View.extend({
     this.socket.on('collision', function(data){
       self.die();
       console.log('Player with this session Id,' + _.pluck(io.sockets, 'sessionid') + ', has died.');
-      // send this die screen only to the client with died Icarus
+      // evoke a function call to send kill screen to the right Icarus
     });
     
     this.canvas = $('#particles')[0]; 
@@ -38,7 +39,7 @@ var PlayerListView = Backbone.View.extend({
   },
   
   fly: function(){
-    
+        
     var self = this;
     $(window).bind('mousemove', function(e) {
       var x, y;
@@ -55,9 +56,16 @@ var PlayerListView = Backbone.View.extend({
         default: y = e.pageY - self.canvas.offsetTop;
       }
       
-      // save mouse's last position
-      self.position = {x: x, y: y};
-      self.socket.emit('icarus position', self.position);
+      //blood, spirit, alive update on the server
+      username = 'Icarus';
+      blood = 100;
+      spirit = 100;
+      alive = true;
+      
+      var sessionId = _.pluck(io.sockets, 'sessionid')[0];
+      self.data = {x: x, y: y, username: this.username, sessionId: sessionId, blood: this.blood, spirit: this.spirit, alive: this.alive};
+      console.log(self.data);
+      self.socket.emit('icarus position', self.data);
       self.draw(x, y);   
     });
   },

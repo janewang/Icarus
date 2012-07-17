@@ -1,10 +1,12 @@
 window.Icarus = Backbone.Model.extend({
-  defaults: {
-    username  : 'Anon',
+  defaults: {   
     x         : 0,
     y         : 0,
-    blood     : 0,
-    spirit    : 0
+    username  : 'anon',
+    sessionId : 0,
+    blood     : 100,
+    spirit    : 100,
+    alive     : true
   }
 });
 
