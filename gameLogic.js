@@ -8,7 +8,6 @@ var io = application.io;
 // except the current socket namespace, the current socket will not receive the event)
 
 var playerList = [];
-var sessionList = [];
 
 io.sockets.on('connection', function (socket) {
   console.log('Player ' + socket.id + ' has joined.');
@@ -16,13 +15,18 @@ io.sockets.on('connection', function (socket) {
   socket.on('icarus position', function(data){
       socket.broadcast.emit('other icarus position', data);
       
-      // add new Icarus to list
-      if ( _(sessionList).include(data.sessionId) !== true || playerList.length == 0 ) {
+      var inList = _.chain(playerList)
+      .pluck('sessionId')
+      .include(data.sessionId)
+      .value();
+      console.log(inList);
+      
+      // add new Icarus if not in playerList
+      if ( inList === false || playerList.length === 0 ) {
         playerList.push(new Icarus(data.x, data.y, data.username, data.sessionId, data.blood, data.spirit, data.alive));
-        sessionList.push(data.sessionId);
       }
       
-      // update Icarus model
+      // update Icarus model on change
       _(playerList).each(function(icarus) {
         if (icarus.sessionId == data.sessionId) {
           icarus.x = data.x;
@@ -44,10 +48,8 @@ io.sockets.on('connection', function (socket) {
     _(playerList).each(function(icarus) {
       if (icarus.sessionId === socket.id) {
         _(playerList).without(icarus);
-        _(sessionList).without(socket.id);
       }
-    });
-    
+    });  
   });
 });
 
