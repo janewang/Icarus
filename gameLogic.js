@@ -16,11 +16,13 @@ io.sockets.on('connection', function (socket) {
   socket.on('icarus position', function(data){
       socket.broadcast.emit('other icarus position', data);
       
+      // add new Icarus to list
       if ( _(sessionList).include(data.sessionId) !== true || playerList.length == 0 ) {
         playerList.push(new Icarus(data.x, data.y, data.username, data.sessionId, data.blood, data.spirit, data.alive));
         sessionList.push(data.sessionId);
       }
       
+      // update Icarus model
       _(playerList).each(function(icarus) {
         if (icarus.sessionId == data.sessionId) {
           icarus.x = data.x;
@@ -29,10 +31,7 @@ io.sockets.on('connection', function (socket) {
           icarus.spirit = data.spirit;
           icarus.alive = data.alive;
         }
-        return sessionList.push(icarus.sessionId); 
-      });
-      
-      console.log(playerList);     
+      });    
   });
   
   socket.on('collision', function(data){
@@ -179,10 +178,10 @@ var IcarusApp = function(io) {
   this.particles = [];
   _(100).times(_.bind(function() { this.particles.push(new Particle()); }, this));
 
-  var _this = this;  
+  var self = this;  
   var timer = setInterval(function() {
-    _this.update();
-    io.sockets.emit('particle position', _.pluck(_this.particles, 'position'));
+    self.update();
+    io.sockets.emit('particle position', _.pluck(self.particles, 'position'));
   }, 50);
 }
 
@@ -190,10 +189,10 @@ IcarusApp.prototype.update = function() {
   
   var factor = 9;
   var min_proximity = 4;
-  var _this = this;
+  var self = this;
 
   _(this.particles).each(function(a, idx) {
-    var rest = _.rest(_this.particles, idx);
+    var rest = _.rest(self.particles, idx);
     _(rest).each(function(b) {
       var vec = a.position.sub(b.position);
       var length = vec.length();
