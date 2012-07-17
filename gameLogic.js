@@ -8,25 +8,31 @@ var io = application.io;
 // except the current socket namespace, the current socket will not receive the event)
 
 var playerList = [];
+var sessionList = [];
 
 io.sockets.on('connection', function (socket) {
+  console.log('Player ' + socket.id + ' has joined.');
   
   socket.on('icarus position', function(data){
       socket.broadcast.emit('other icarus position', data);
-
+      
+      if ( _(sessionList).include(data.sessionId) !== true || playerList.length == 0 ) {
+        playerList.push(new Icarus(data.x, data.y, data.username, data.sessionId, data.blood, data.spirit, data.alive));
+        sessionList.push(data.sessionId);
+      }
+      
       _(playerList).each(function(icarus) {
         if (icarus.sessionId == data.sessionId) {
-          console.log('update existing icarus');
           icarus.x = data.x;
           icarus.y = data.y;
           icarus.blood = data.blood;
           icarus.spirit = data.spirit;
           icarus.alive = data.alive;
-        } else {
-          console.log('add new icarus');
-          playerList.push(new Icarus(data.x, data.y, data.username, data.sessionId, data.blood, data.spirit, data.alive));
         }
+        return sessionList.push(icarus.sessionId); 
       });
+      
+      console.log(playerList);     
   });
   
   socket.on('collision', function(data){
@@ -34,7 +40,15 @@ io.sockets.on('connection', function (socket) {
   });
   
   socket.on('disconnect', function() {
-    console.log('Player ' + socket.id + ' has disconnected.');
+    
+    console.log('Player ' + socket.id + ' has disconnected.');    
+    _(playerList).each(function(icarus) {
+      if (icarus.sessionId === socket.id) {
+        _(playerList).without(icarus);
+        _(sessionList).without(socket.id);
+      }
+    });
+    
   });
 });
 

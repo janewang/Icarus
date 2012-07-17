@@ -64,7 +64,6 @@ var PlayerListView = Backbone.View.extend({
       
       var sessionId = _.pluck(io.sockets, 'sessionid')[0];
       self.data = {x: x, y: y, username: this.username, sessionId: sessionId, blood: this.blood, spirit: this.spirit, alive: this.alive};
-      console.log(self.data);
       self.socket.emit('icarus position', self.data);
       self.draw(x, y);   
     });
