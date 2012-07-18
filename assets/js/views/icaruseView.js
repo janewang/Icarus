@@ -17,10 +17,11 @@ var PlayerListView = Backbone.View.extend({
       self.draw(data.x, data.y);
     });
     
-    this.socket.on('collision', function(data){
-      self.die();
-      console.log('Player with this session Id,' + _.pluck(io.sockets, 'sessionid') + ', has died.');
-      // evoke a function call to send kill screen to the right Icarus
+    this.socket.on('collision', function(player){
+      if (player.alive == false) {
+        self.die(player);
+        console.log('Player with this session Id,' + _.pluck(io.sockets, 'sessionid') + ', has died.');        
+      }
     });
     
     this.canvas = $('#particles')[0]; 
@@ -69,32 +70,21 @@ var PlayerListView = Backbone.View.extend({
     });
   },
   
-  die: function() {
-    
-    // need this to show only on some clients, not all clients
+  die: function(player) {
     var self = this;
-    var count = 0;
-    var endGame = function() {
-        count++;
-        if (count % 2 == 1)  {
-            self.context.clearRect(150, 240, 500, 200);
-            self.context.fillStyle = "rgba(0,255,0,0.85)";
-            self.context.font = '60pt Arial';
-            self.context.textAlign = 'center';
-            self.context.textBaseline = 'center';
-            self.context.fillText('GAME OVER', self.canvas.width/2, self.canvas.height/2);
-        } 
-        else {
-            self.context.clearRect(150, 240, 500, 200);
-            self.context.fillStyle = 'rgba(0,255,0,0.85)';
-            self.context.font = '30pt Arial';
-            self.context.textAligh = 'center';
-            self.context.textBaseline = 'center';
-            self.context.fillText('To play again, click Start.', self.canvas.width/2, self.canvas.height/2);
-        }
+    if (player.sessionId == _.pluck(io.sockets, 'sessionid')[0])
+    {
+      var endGame = function() {
+        self.context.clearRect(0, 0, 800, 600);
+        self.context.fillStyle = 'rgba(0,255,0,0.85)';
+        self.context.font = '30pt Arial';
+        self.context.textAligh = 'center';
+        self.context.textBaseline = 'center';
+        self.context.fillText('GAME OVER', self.canvas.width/2-150, self.canvas.height/2);
+      }  
+      self.newGameTimer = setInterval(endGame, 300);     
     }
-    self.newGameTimer = setInterval(endGame, 300);
-  } 
+  }
 });
 
 var playerListView = new PlayerListView();
