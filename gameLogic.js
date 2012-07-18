@@ -19,13 +19,12 @@ io.sockets.on('connection', function (socket) {
       .pluck('sessionId')
       .include(data.sessionId)
       .value();
-      console.log(inList);
       
       // add new Icarus if not in playerList
       if ( inList === false || playerList.length === 0 ) {
         playerList.push(new Icarus(data.x, data.y, data.username, data.sessionId, data.blood, data.spirit, data.alive));
       }
-      
+           
       // update Icarus model on change
       _(playerList).each(function(icarus) {
         if (icarus.sessionId == data.sessionId) {
@@ -42,12 +41,11 @@ io.sockets.on('connection', function (socket) {
     io.sockets.emit('One player has died.');
   });
   
-  socket.on('disconnect', function() {
-    
-    console.log('Player ' + socket.id + ' has disconnected.');    
+  socket.on('disconnect', function() {    
+    console.log('Player ' + socket.id + ' has disconnected.'); 
     _(playerList).each(function(icarus) {
       if (icarus.sessionId === socket.id) {
-        _(playerList).without(icarus);
+        playerList = _(playerList).without(icarus);
       }
     });  
   });
@@ -157,30 +155,29 @@ var Particle = function(){
     }
 }
 
-// collision check
-function collision(particles, playerList) {
+// collision check,   
+// for each collision, deduct spirit and blood on Icarus model
+// when blood is 0, set alive to false
+function checkCollision(a) {
   
-  // for each collision, deduct spirit and blood on Icarus model
-  // when blood is 0, set alive to false
-  this.particles = particles;
-  this.playerList = playerList;
-  
-  _.chain(particles)
-      .filter(function(a) {
-          return ( Math.abs(a.position.x - ix) < 6 && (Math.abs(a.position.y - iy) < 6));
-      })
-      .each(function(a){
-          io.sockets.emit('collision', data); // need to include sessionid to know which client is died
-      });
+  if (playerList == []) {
+    console.log('empty');
+  } else {
+    _.each(playerList, function(player) {
+      if (Math.abs(a.position.x - player.x) < 6 && (Math.abs(a.position.y - player.y) < 6)) {
+        player.alive = false;
+        io.sockets.emit('collision', player);
+      }
+    });
+  }
 }
 
 var IcarusApp = function(io) {
+
   var self = this;
-  
   this.particles = [];
   _(100).times(_.bind(function() { this.particles.push(new Particle()); }, this));
-
-  var self = this;  
+ 
   var timer = setInterval(function() {
     self.update();
     io.sockets.emit('particle position', _.pluck(self.particles, 'position'));
@@ -207,6 +204,7 @@ IcarusApp.prototype.update = function() {
       }
     });
     a.step();
+    checkCollision(a);
   });
 }
 
