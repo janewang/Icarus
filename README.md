@@ -3,7 +3,7 @@ Icarus
 
 By Jane Wang [@janeylwang](https://twitter.com/JaneyLWang)
 
-A multiplayer game with many flying Icaruses. Survive as long as you can against other players in a particle universe. Universe physics may change without warning. Try to beat your opponents by keep your spirit and blood count high. This game is partly inspired by Mozilla BrowserQuest and various large multiplayer games.
+A multiplayer game with many flying Icaruses. Survive as long as you can against other players in a particle universe. Universe physics may change without warning. Try to beat your opponents by keep your spirit high. This game is partly inspired by Mozilla BrowserQuest and various large multiplayer games.
 
 ### Setup Installation:
 

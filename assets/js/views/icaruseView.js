@@ -57,14 +57,12 @@ var PlayerListView = Backbone.View.extend({
         default: y = e.pageY - self.canvas.offsetTop;
       }
       
-      //blood, spirit, alive update on the server
-      username = 'Icarus';
-      blood = 100;
+      // spirit, alive update on the server
       spirit = 100;
       alive = true;
       
       var sessionId = _.pluck(io.sockets, 'sessionid')[0];
-      self.data = {x: x, y: y, username: this.username, sessionId: sessionId, blood: this.blood, spirit: this.spirit, alive: this.alive};
+      self.data = {x: x, y: y, sessionId: sessionId, spirit: this.spirit, alive: this.alive};
       self.socket.emit('icarus position', self.data);
       self.draw(x, y);   
     });

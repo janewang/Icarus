@@ -3,18 +3,14 @@ extends layout
 block content
   .container
     .row
-      form
-        | Enter name:  
-        input(type='text', name='username') 
-        |   
-        a#start.btn.btn-danger.btn-large(type='submit', name='start') Start
+      a#start.btn.btn-danger.btn-large(type='submit', name='start') Start
       canvas#particles(height='600px', width='800px')
-      p Current Level of Blood and Spirit
+      p Current Level of Spirit
       div#highscorer
         ul
-          li display current level of blood and spirit
+          li display current level of spirit
           li add music to game
-          li assign final list of high scorers  
+          li assign final list of high scorers or chat session
       hr
       footer
         p © Icarus 2012

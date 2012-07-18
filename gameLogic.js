@@ -22,7 +22,7 @@ io.sockets.on('connection', function (socket) {
       
       // add new Icarus if not in playerList
       if ( inList === false || playerList.length === 0 ) {
-        playerList.push(new Icarus(data.x, data.y, data.username, data.sessionId, data.blood, data.spirit, data.alive));
+        playerList.push(new Icarus(data.x, data.y, data.sessionId, data.spirit, data.alive));
       }
            
       // update Icarus model on change
@@ -30,7 +30,6 @@ io.sockets.on('connection', function (socket) {
         if (icarus.sessionId == data.sessionId) {
           icarus.x = data.x;
           icarus.y = data.y;
-          icarus.blood = data.blood;
           icarus.spirit = data.spirit;
           icarus.alive = data.alive;
         }
@@ -52,12 +51,10 @@ io.sockets.on('connection', function (socket) {
 });
 
 // Icarus model
-var Icarus = function(x, y, username, sessionId, blood, spirit, alive){
+var Icarus = function(x, y, sessionId, spirit, alive){
   this.x = x;
   this.y = y;
-  this.username = username;
   this.sessionId = sessionId;
-  this.blood = blood;
   this.spirit = spirit;
   this.alive = alive
 }
@@ -156,19 +153,16 @@ var Particle = function(){
 }
 
 // collision check,   
-// for each collision, deduct spirit and blood on Icarus model
-// when blood is 0, set alive to false
+// for each collision, deduct spirit on Icarus model
+// when spirit is 0, set alive to false
 function checkCollision(a) {
-  
-  if (playerList == []) {
-    console.log('empty');
-  } else {
-    _.each(playerList, function(player) {
-      if (Math.abs(a.position.x - player.x) < 6 && (Math.abs(a.position.y - player.y) < 6)) {
-        player.alive = false;
-        io.sockets.emit('collision', player);
+  if (playerList.length !== 0) {
+    _.each(playerList, function(icarus) {
+      if (Math.abs(a.position.x - icarus.x) < 6 && (Math.abs(a.position.y - icarus.y) < 6)) {
+        icarus.alive = false;
+        io.sockets.emit('collision', icarus);
       }
-    });
+    });  
   }
 }
 
