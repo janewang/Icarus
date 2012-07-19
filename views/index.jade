@@ -4,13 +4,18 @@ block content
   .container
     .row
       a#start.btn.btn-danger.btn-large(type='submit', name='start') Start
+    .row  
+      span Vitality
+      .container
+          .progress
+              .bar(style='width: 100%;')
+    .row
       canvas#particles(height='600px', width='800px')
-      p Current Level of Spirit
       div#highscorer
         ul
-          li display current level of spirit
           li add music to game
-          li assign final list of high scorers or chat session
+          li assign final list of high scorers 
+          li chat session
       hr
       footer
         p © Icarus 2012

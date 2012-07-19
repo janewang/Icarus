@@ -7,7 +7,7 @@ var PlayerListView = Backbone.View.extend({
   },
   
   initialize: function(){
-    _.bindAll(this, 'start', 'draw', 'fly', 'die');
+    _.bindAll(this, 'start', 'draw', 'fly', 'playerStatus');
     var self = this;
     this.icarusCollection = new IcarusCollection(1);
     
@@ -18,10 +18,7 @@ var PlayerListView = Backbone.View.extend({
     });
     
     this.socket.on('collision', function(player){
-      if (player.alive == false) {
-        self.die(player);
-        console.log('Player with this session Id,' + _.pluck(io.sockets, 'sessionid') + ', has died.');        
-      }
+      self.playerStatus(player);
     });
     
     this.canvas = $('#particles')[0]; 
@@ -57,30 +54,29 @@ var PlayerListView = Backbone.View.extend({
         default: y = e.pageY - self.canvas.offsetTop;
       }
       
-      // spirit, alive update on the server
-      spirit = 100;
-      alive = true;
-      
       var sessionId = _.pluck(io.sockets, 'sessionid')[0];
-      self.data = {x: x, y: y, sessionId: sessionId, spirit: this.spirit, alive: this.alive};
+      self.data = {x: x, y: y, sessionId: sessionId};
       self.socket.emit('icarus position', self.data);
       self.draw(x, y);   
     });
   },
   
-  die: function(player) {
+  playerStatus: function(player) {
     var self = this;
-    if (player.sessionId == _.pluck(io.sockets, 'sessionid')[0])
-    {
-      var endGame = function() {
-        self.context.clearRect(0, 0, 800, 600);
-        self.context.fillStyle = 'rgba(0,255,0,0.85)';
-        self.context.font = '30pt Arial';
-        self.context.textAligh = 'center';
-        self.context.textBaseline = 'center';
-        self.context.fillText('GAME OVER', self.canvas.width/2-150, self.canvas.height/2);
-      }  
-      self.newGameTimer = setInterval(endGame, 300);     
+    $('.bar').attr('style', function() { return "width: " + player.spirit + "%"; });
+    if (player.spirit <= 0) {
+      if (player.sessionId == _.pluck(io.sockets, 'sessionid')[0])
+      {
+        var endGame = function() {
+          self.context.clearRect(0, 0, 800, 600);
+          self.context.fillStyle = 'rgba(0,255,0,0.85)';
+          self.context.font = '30pt Arial';
+          self.context.textAligh = 'center';
+          self.context.textBaseline = 'center';
+          self.context.fillText('GAME OVER', self.canvas.width/2-150, self.canvas.height/2);
+        }  
+        self.newGameTimer = setInterval(endGame, 300);     
+      }
     }
   }
 });

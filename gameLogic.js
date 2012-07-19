@@ -22,7 +22,7 @@ io.sockets.on('connection', function (socket) {
       
       // add new Icarus if not in playerList
       if ( inList === false || playerList.length === 0 ) {
-        playerList.push(new Icarus(data.x, data.y, data.sessionId, data.spirit, data.alive));
+        playerList.push(new Icarus(data.x, data.y, data.sessionId));
       }
            
       // update Icarus model on change
@@ -30,8 +30,6 @@ io.sockets.on('connection', function (socket) {
         if (icarus.sessionId == data.sessionId) {
           icarus.x = data.x;
           icarus.y = data.y;
-          icarus.spirit = data.spirit;
-          icarus.alive = data.alive;
         }
       });    
   });
@@ -51,12 +49,11 @@ io.sockets.on('connection', function (socket) {
 });
 
 // Icarus model
-var Icarus = function(x, y, sessionId, spirit, alive){
+var Icarus = function(x, y, sessionId){
   this.x = x;
   this.y = y;
   this.sessionId = sessionId;
-  this.spirit = spirit;
-  this.alive = alive
+  this.spirit = 100;
 }
 
 // vector model
@@ -152,14 +149,12 @@ var Particle = function(){
     }
 }
 
-// collision check,   
-// for each collision, deduct spirit on Icarus model
-// when spirit is 0, set alive to false
+// collision check
 function checkCollision(a) {
   if (playerList.length !== 0) {
     _.each(playerList, function(icarus) {
       if (Math.abs(a.position.x - icarus.x) < 6 && (Math.abs(a.position.y - icarus.y) < 6)) {
-        icarus.alive = false;
+        icarus.spirit -= 10;
         io.sockets.emit('collision', icarus);
       }
     });  
@@ -167,7 +162,6 @@ function checkCollision(a) {
 }
 
 var IcarusApp = function(io) {
-
   var self = this;
   this.particles = [];
   _(100).times(_.bind(function() { this.particles.push(new Particle()); }, this));
