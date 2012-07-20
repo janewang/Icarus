@@ -2,10 +2,14 @@
     "name": "icarus"
   , "version": "0.0.1"
   , "private": true
-  , "scripts": {
-      "start": "node app"
-  }
-  , "dependencies": {
+  , "engines": {
+      "node": "0.8.2",
+      "npm": "1.1.36"
+  },
+  "script": {
+    "start": "node app"
+  },
+  "dependencies": {
       "express"       : "3.x.x"
     , "jade"          : "*"
     , "less"          : "*"
