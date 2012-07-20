@@ -19,12 +19,14 @@ var PlayerListView = Backbone.View.extend({
     
     this.socket.on('collision', function(player){
       self.playerStatus(player);
+      impactSound.play();
     });
     
     this.canvas = $('#particles')[0]; 
     this.context = this.canvas.getContext('2d');
     this.img = new Image();
     this.img.src = '/images/kid_icarus.png';
+    var impactSound = new Audio('/audios/impact.wav');
   },
   
   start: function(x, y) {
