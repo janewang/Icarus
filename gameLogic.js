@@ -31,11 +31,15 @@ io.sockets.on('connection', function (socket) {
           icarus.x = data.x;
           icarus.y = data.y;
         }
-      });    
+      });
   });
   
   socket.on('collision', function(data){
-    io.sockets.emit('One player has died.');
+    _(playerList).each(function(icarus) {
+      if (icarus.sessionId === data.id && data.spirit <= 0) {
+        playerList = _(playerList).without(icarus);
+      }
+    });
   });
   
   socket.on('disconnect', function() {    
@@ -100,7 +104,7 @@ var Vector = function(x, y){
 // particle model
 var Particle = function(){
 
-    var width = 800, height = 600;    
+    var width = 960, height = 600;    
     var initial_speed = 1;
     var speed_limit = 4;
     var bounce_damping = 0.5;

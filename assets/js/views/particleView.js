@@ -14,8 +14,8 @@ var UniverseView = Backbone.View.extend({
       this.particleCollection = new ParticleCollection();
       var self = this;
 
-      var socket = io.connect('http://' +   window.location.hostname);
-      socket.on('particle position', function (data) {
+      this.socket = io.connect('http://' +   window.location.hostname);
+      this.socket.on('particle position', function (data) {
         self.particleCollection.reset(data);
       });
     },

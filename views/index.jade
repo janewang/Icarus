@@ -2,19 +2,15 @@ extends layout
 
 block content
   .container
+
     .row
-      a#start.btn.btn-danger.btn-large(type='submit', name='start') Start
+      canvas#particles(height='600px', width='960px')
+      div#highscorer
     .row  
       span Vitality
       .container
           .progress
-              .bar(style='width: 100%;')
-    .row
-      canvas#particles(height='600px', width='800px')
-      div#highscorer
-        ul
-          li assign final list of high scorers 
-          li chat session
+            .bar(style='width: 100%;')    
       hr
       footer
         p © Icarus 2012
