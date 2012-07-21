@@ -3,8 +3,7 @@ window.Icarus = Backbone.Model.extend({
     x         : 0,
     y         : 0,
     sessionId : 0,
-    spirit    : 100,
-    alive     : true
+    spirit    : 100
   }
 });
 

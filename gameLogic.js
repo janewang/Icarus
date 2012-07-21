@@ -105,7 +105,7 @@ var Vector = function(x, y){
 var Particle = function(){
 
     var width = 960, height = 600;    
-    var initial_speed = 1;
+    var initial_speed = 5;
     var speed_limit = 20;
     var bounce_damping = 0.5;
     
@@ -157,7 +157,7 @@ var Particle = function(){
 function checkCollision(a) {
   if (playerList.length !== 0) {
     _.each(playerList, function(icarus) {
-      if (Math.abs(a.position.x - icarus.x) < 12 && (Math.abs(a.position.y - icarus.y) < 16)) {
+      if (Math.abs(a.position.x - icarus.x) < 10 && (Math.abs(a.position.y - icarus.y) < 16)) {
         icarus.spirit -= 5;
         io.sockets.emit('collision', icarus);
       }

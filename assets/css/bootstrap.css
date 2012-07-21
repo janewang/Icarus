@@ -158,7 +158,7 @@ textarea {
 body {
   margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
+  font-size: 15px;
   line-height: 18px;
   color: #333333;
   background-color: #ffffff;
@@ -3616,7 +3616,7 @@ input[type="submit"].btn.btn-mini {
   float: left;
   padding: 8px 20px 12px;
   margin-left: -20px;
-  font-size: 20px;
+  font-size: 30px;
   font-weight: 200;
   line-height: 1;
   color: #999999;
@@ -3790,7 +3790,7 @@ input[type="submit"].btn.btn-mini {
 
 .navbar .nav > li > a {
   float: none;
-  padding: 9px 10px 11px;
+  padding: 15px 10px 11px;
   line-height: 19px;
   color: #999999;
   text-decoration: none;
@@ -4661,13 +4661,13 @@ a.badge:hover {
   color: #ffffff;
   text-align: center;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-  background-color: #0e90d2;
-  background-image: -moz-linear-gradient(top, #149bdf, #0480be);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#149bdf), to(#0480be));
-  background-image: -webkit-linear-gradient(top, #149bdf, #0480be);
-  background-image: -o-linear-gradient(top, #149bdf, #0480be);
-  background-image: linear-gradient(top, #149bdf, #0480be);
-  background-image: -ms-linear-gradient(top, #149bdf, #0480be);
+  background-color: #ff6801;
+  background-image: -moz-linear-gradient(top, #ff6801, #ffab40);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ff6801), to(#ffab40));
+  background-image: -webkit-linear-gradient(top, #ff6801, #ffab40);
+  background-image: -o-linear-gradient(top, #ff6801, #ffab40);
+  background-image: linear-gradient(top, #ff6801, #ffab40);
+  background-image: -ms-linear-gradient(top, #ff6801, #ffab40);
   background-repeat: repeat-x;
   filter: progid:dximagetransform.microsoft.gradient(startColorstr='#149bdf', endColorstr='#0480be', GradientType=0);
   -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
