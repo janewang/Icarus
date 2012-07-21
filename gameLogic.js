@@ -13,24 +13,19 @@ io.sockets.on('connection', function (socket) {
   console.log('Player ' + socket.id + ' has joined.');
   
   socket.on('start game', function(){
-    var icarusApp = new IcarusApp(io);
+    icarusApp = new IcarusApp(io);
   });
   
   socket.on('icarus position', function(data){
-      
+
       socket.broadcast.emit('other icarus position', data);
       
-      var inList = _.chain(playerList)
-      .pluck('sessionId')
-      .include(data.sessionId)
-      .value();
-      
-      // add new Icarus if not in playerList
-      if ( inList === false || playerList.length === 0 ) {
+      // add new Icarus to playerList
+      if ( _.chain(playerList).pluck('sessionId').include(data.sessionId).value() === false || playerList.length === 0 ) {
         playerList.push(new Icarus(data.x, data.y, data.sessionId));
       }
-           
-      // update Icarus model on change
+      
+      // update Icarus model
       _(playerList).each(function(icarus) {
         if (icarus.sessionId == data.sessionId) {
           icarus.x = data.x;
@@ -49,6 +44,7 @@ io.sockets.on('connection', function (socket) {
   
   socket.on('disconnect', function() {    
     console.log('Player ' + socket.id + ' has disconnected.'); 
+    
     _(playerList).each(function(icarus) {
       if (icarus.sessionId === socket.id) {
         playerList = _(playerList).without(icarus);
@@ -56,7 +52,7 @@ io.sockets.on('connection', function (socket) {
     });
     
     if (playerList.length === 0) {
-      // turn off timer
+      icarusApp = null;
     }
   });
 });
@@ -162,13 +158,15 @@ var Particle = function(){
     }
 }
 
-function checkCollision(a) {
+function checkCollision(particles) {
   if (playerList.length !== 0) {
     _.each(playerList, function(icarus) {
-      if (Math.abs(a.position.x - icarus.x) < 10 && (Math.abs(a.position.y - icarus.y) < 16)) {
-        icarus.spirit -= 5;
-        io.sockets.emit('collision', icarus);
-      }
+      _.each(particles, function(a) {
+        if (Math.abs(a.position.x - icarus.x) < 10 && (Math.abs(a.position.y - icarus.y) < 16)) {
+          icarus.spirit -= 4;
+          io.sockets.emit('collision', icarus);
+        }
+      });
     });  
   }
 }
@@ -179,7 +177,8 @@ var IcarusApp = function(io) {
   _(150).times(_.bind(function() { this.particles.push(new Particle()); }, this));
   
   this.timer = setInterval(function() {
-    self.update();
+    this.particles = self.update();
+    checkCollision(this.particles);
     io.sockets.emit('particle position', _.pluck(self.particles, 'position'));
   }, 50);
 }
@@ -204,6 +203,8 @@ IcarusApp.prototype.update = function() {
       }
     });
     a.step();
-    checkCollision(a);
   });
+  return this.particles;
 }
+
+var icarusApp;
