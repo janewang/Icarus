@@ -12,14 +12,10 @@ var playerList = [];
 io.sockets.on('connection', function (socket) {
   console.log('Player ' + socket.id + ' has joined.');
   
-  socket.on('start game', function(){
-    icarusApp = new IcarusApp(io);
-  });
-  
   socket.on('icarus position', function(data){
+    
+    socket.broadcast.emit('other icarus position', data);
 
-      socket.broadcast.emit('other icarus position', data);
-      
       // add new Icarus to playerList
       if ( _.chain(playerList).pluck('sessionId').include(data.sessionId).value() === false || playerList.length === 0 ) {
         playerList.push(new Icarus(data.x, data.y, data.sessionId));
@@ -50,10 +46,6 @@ io.sockets.on('connection', function (socket) {
         playerList = _(playerList).without(icarus);
       }
     });
-    
-    if (playerList.length === 0) {
-      icarusApp = null;
-    }
   });
 });
 
@@ -158,16 +150,14 @@ var Particle = function(){
     }
 }
 
-function checkCollision(particles) {
+function checkCollision(a) {
   if (playerList.length !== 0) {
     _.each(playerList, function(icarus) {
-      _.each(particles, function(a) {
-        if (Math.abs(a.position.x - icarus.x) < 10 && (Math.abs(a.position.y - icarus.y) < 16)) {
-          icarus.spirit -= 4;
-          io.sockets.emit('collision', icarus);
-        }
-      });
-    });  
+      if (Math.abs(a.position.x - icarus.x) < 10 && (Math.abs(a.position.y - icarus.y) < 16)) {
+        icarus.spirit -= 4;
+        io.sockets.emit('collision', icarus);
+      }
+    });
   }
 }
 
@@ -175,10 +165,9 @@ var IcarusApp = function(io) {
   var self = this;
   this.particles = [];
   _(150).times(_.bind(function() { this.particles.push(new Particle()); }, this));
-  
-  this.timer = setInterval(function() {
-    this.particles = self.update();
-    checkCollision(this.particles);
+
+  var timer = setInterval(function() {
+    self.update();
     io.sockets.emit('particle position', _.pluck(self.particles, 'position'));
   }, 50);
 }
@@ -203,8 +192,8 @@ IcarusApp.prototype.update = function() {
       }
     });
     a.step();
+    checkCollision(a);
   });
-  return this.particles;
 }
 
-var icarusApp;
+var icarusApp = new IcarusApp(io);

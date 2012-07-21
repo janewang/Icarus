@@ -17,7 +17,7 @@ var PlayerListView = Backbone.View.extend({
     });
     this.socket.on('collision', function(data){
       self.playerStatus(data);
-      self.impactSound.play();
+      // self.impactSound.play();
     });
 
     this.canvas = $('#particles')[0]; 
@@ -26,16 +26,16 @@ var PlayerListView = Backbone.View.extend({
     this.context.font = '30pt Helvetica';
     this.context.textAligh = 'center';
     this.context.textBaseline = 'center';
-    this.context.fillText('Press Any Key to Start Game', self.canvas.width/2-250, self.canvas.height/2); 
+    this.context.fillText('Press Any Key to Start Game', self.canvas.width/2-250, self.canvas.height/2);
     this.img = new Image();
-    this.img.src = '/images/kid_icarus.png';
-    this.impactSound = new Audio('/audios/impact.wav');
-    this.backgroundMusic = new Audio('/audios/SusanFantasticDamage.mp3');
+    this.img.src = '../../images/kid_icarus.png';
+    // this.impactSound = new Audio('../../audios/impact.wav');
+    this.backgroundMusic = new Audio('../../audios/SusanFantasticDamage.mp3');
   },
   
   start: function(x, y) {
-    this.socket.emit('start game');
     this.fly();
+    // this.socket.emit('start game');
     this.backgroundMusic.play();
     clearInterval(this.newGameTimer);
   },
