@@ -9,14 +9,24 @@ var UniverseView = Backbone.View.extend({
       _.bindAll(this, 'start');
       this.canvas = $('#particles')[0]; 
       this.context = this.canvas.getContext('2d');
+      this.spirit = 100;
       
       this.particleCollection = new ParticleCollection();
       var self = this;
 
       this.socket = io.connect('http://' +   window.location.hostname);
-
+      
+      this.socket.on('collision', function(data){
+        if (data.sessionId === _.pluck(io.sockets, 'sessionid')[0]) {
+          this.spirit = data.spirit;
+        }
+      });
+      
+      // only render universe when this icarus is still alive
       this.socket.on('particle position', function (data) {
-        self.particleCollection.reset(data);
+        if (this.spirit > 0) {
+          self.particleCollection.reset(data);
+        }   
       });
     },
 

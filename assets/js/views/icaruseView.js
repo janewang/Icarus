@@ -77,7 +77,7 @@ var PlayerListView = Backbone.View.extend({
     {
       $(window).off('mousemove');
       var endGame = function() {
-          self.context.clearRect(0, 0, 800, 600);
+          self.context.clearRect(0, 0, 960, 600);
           self.context.fillStyle = 'rgba(255,171,64,0.85)';
           self.context.font = '40pt Helvetica';
           self.context.textAligh = 'center';
