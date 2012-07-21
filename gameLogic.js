@@ -12,7 +12,12 @@ var playerList = [];
 io.sockets.on('connection', function (socket) {
   console.log('Player ' + socket.id + ' has joined.');
   
+  socket.on('start game', function(){
+    var icarusApp = new IcarusApp(io);
+  });
+  
   socket.on('icarus position', function(data){
+      
       socket.broadcast.emit('other icarus position', data);
       
       var inList = _.chain(playerList)
@@ -48,7 +53,11 @@ io.sockets.on('connection', function (socket) {
       if (icarus.sessionId === socket.id) {
         playerList = _(playerList).without(icarus);
       }
-    });  
+    });
+    
+    if (playerList.length === 0) {
+      // turn off timer
+    }
   });
 });
 
@@ -153,7 +162,6 @@ var Particle = function(){
     }
 }
 
-// collision check
 function checkCollision(a) {
   if (playerList.length !== 0) {
     _.each(playerList, function(icarus) {
@@ -168,9 +176,9 @@ function checkCollision(a) {
 var IcarusApp = function(io) {
   var self = this;
   this.particles = [];
-  _(100).times(_.bind(function() { this.particles.push(new Particle()); }, this));
- 
-  var timer = setInterval(function() {
+  _(150).times(_.bind(function() { this.particles.push(new Particle()); }, this));
+  
+  this.timer = setInterval(function() {
     self.update();
     io.sockets.emit('particle position', _.pluck(self.particles, 'position'));
   }, 50);
@@ -199,5 +207,3 @@ IcarusApp.prototype.update = function() {
     checkCollision(a);
   });
 }
-
-var icarusApp = new IcarusApp(io);

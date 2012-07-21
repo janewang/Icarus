@@ -2,7 +2,7 @@ var PlayerListView = Backbone.View.extend({
   el: $('body'),
   
   events: { 
-    'keypress'          : 'start',
+    'keypress': 'start',
   },
   
   initialize: function(){
@@ -22,8 +22,8 @@ var PlayerListView = Backbone.View.extend({
 
     this.canvas = $('#particles')[0]; 
     this.context = this.canvas.getContext('2d');
-    this.context.fillStyle = 'rgba(255,104,1,0.85)';
-    this.context.font = '30pt Arial';
+    this.context.fillStyle = 'rgba(255,171,64,0.85)';
+    this.context.font = '30pt Helvetica';
     this.context.textAligh = 'center';
     this.context.textBaseline = 'center';
     this.context.fillText('Press Any Key to Start Game', self.canvas.width/2-250, self.canvas.height/2); 
@@ -34,6 +34,7 @@ var PlayerListView = Backbone.View.extend({
   },
   
   start: function(x, y) {
+    this.socket.emit('start game');
     this.fly();
     this.backgroundMusic.play();
     clearInterval(this.newGameTimer);
@@ -63,20 +64,22 @@ var PlayerListView = Backbone.View.extend({
       var sessionId = _.pluck(io.sockets, 'sessionid')[0];
       self.data = {x: x, y: y, sessionId: sessionId};
       self.socket.emit('icarus position', self.data);
-      self.draw(x, y);   
+      self.draw(x, y);
     });
   },
   
   playerStatus: function(player) {
     var self = this;
-    $('.bar').attr('style', function() { return "width: " + player.spirit + "%"; });
-    if (player.spirit <= 0 && player.sessionId == _.pluck(io.sockets, 'sessionid')[0])
+    if (player.sessionId === _.pluck(io.sockets, 'sessionid')[0]) {
+      $('.bar').attr('style', function() { return "width: " + player.spirit + "%"; });   
+    }
+    if (player.spirit <= 0 && player.sessionId === _.pluck(io.sockets, 'sessionid')[0])
     {
       $(window).off('mousemove');
       var endGame = function() {
           self.context.clearRect(0, 0, 800, 600);
-          self.context.fillStyle = 'rgba(0,255,0,0.85)';
-          self.context.font = '30pt Arial';
+          self.context.fillStyle = 'rgba(255,171,64,0.85)';
+          self.context.font = '40pt Helvetica';
           self.context.textAligh = 'center';
           self.context.textBaseline = 'center';
           self.context.fillText('GAME OVER', self.canvas.width/2-150, self.canvas.height/2);

@@ -2,8 +2,7 @@ var UniverseView = Backbone.View.extend({
     el: $('body'),
     
     events: {
-        'click a#start'     : 'start', 
-        'keypress'          : 'start'  
+        'keypress'  : 'start'  
     },
     
     initialize: function() {
@@ -15,6 +14,7 @@ var UniverseView = Backbone.View.extend({
       var self = this;
 
       this.socket = io.connect('http://' +   window.location.hostname);
+
       this.socket.on('particle position', function (data) {
         self.particleCollection.reset(data);
       });
