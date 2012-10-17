@@ -9,9 +9,9 @@ A multiplayer game with many flying Icaruses. Survive as long as you can against
 
 1. Run `$ npm install` to resolve dependencies
 
-2. If you are the host, run `$ node app.js` and go to `http://localhost:4000/`
+2. If you are the host, run `$ node app.js` and go to `http://localhost:3000/`
 
-3. Other players join the game at `http://[host ip]:4000/`
+3. Other players join the game at `http://[host ip]:3000/`
 
 4. Play!
 
