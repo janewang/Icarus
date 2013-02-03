@@ -3,16 +3,18 @@
  * Module dependencies.
  */
 
-var express     = require('express')
-  , http        = require('http')
-  , sio         = require('socket.io');
+var express           = require('express')
+  , http              = require('http')
+  , sio               = require('socket.io');
   
-global._        = require('underscore');
-global.request  = require('request');
-global.mongoose = require('mongoose');
-global.app      = express();
+global._              = require('underscore');
+global.request        = require('request');
+global.MongoClient    = require('mongodb').MongoClient;
+global.app            = express();
 
-mongoose.connect('mongodb://nodejitsu:a6c7a922e2243fd1205c05ab98ef5532@linus.mongohq.com:10025/nodejitsudb6521243373', 'icarus');
+MongoClient.connect('mongodb://172.0.0.0.1:pass@host:3000/icarus', function(err, db) {
+    console.log('connected');
+});
 
 // Configuration
 

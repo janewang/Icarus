@@ -1,14 +1,14 @@
+body {
+  background: #FFF;
+  background-image: url('../images/shattered.png');
+  background-repeat: repeat;
+}
+
 @font-face {
   font-family: 'Ubuntu';
   font-style: normal;
   font-weight: 400;
   src: local('Ubuntu'), url(http://themes.googleusercontent.com/static/fonts/ubuntu/v4/vRvZYZlUaogOuHbBTT1SNevvDin1pK8aKteLpeZ5c0A.woff) format('woff');
-}
-
-body {
-  background: #FFF;
-  background-image: url('../images/shattered.png');
-  background-repeat: repeat;
 }
 
 h1 {
