@@ -1,13 +1,15 @@
 Icarus
 ========
 
-By Jane Wang [@janeylwang](https://twitter.com/JaneyLWang)
+By Jane Wang [@janeylwang](http://twitter.com/yaneylwang)
+
+Live on [Nodejitsu](http://icarus.jit.su/)
 
 A multiplayer game with many flying Icaruses. Survive as long as you can against other players in a particle universe. Universe physics may change without warning. Try to beat your opponents by keep your spirit high. This game is partly inspired by Mozilla BrowserQuest and various large multiplayer games.
 
 ### Setup Installation:
 
-1. Run `$ npm install` to resolve dependencies
+1. `$ git clone` and `$ npm install` to resolve dependencies
 
 2. If you are the host, run `$ node app.js` and go to `http://localhost:3000/`
 
