@@ -12,7 +12,7 @@ global.request  = require('request');
 global.mongoose = require('mongoose');
 global.app      = express();
 
-mongoose.connect('localhost', 'icarus');
+mongoose.connect('mongodb://nodejitsu:a6c7a922e2243fd1205c05ab98ef5532@linus.mongohq.com:10025/nodejitsudb6521243373', 'icarus');
 
 // Configuration
 
